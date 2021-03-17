@@ -27,33 +27,37 @@ su - ${USERNAME} <<EOF
 # Setup new SSH keys.
 ssh-keygen -q -t ed25519  -N '' -f ~/.ssh/id_ed25519 <<<y 2>&1 >/dev/null
 eval "$(ssh-agent -s)"
-ssh-add /home/${USERNAME}/.ssh/id_ed25519
+ssh-add ~/.ssh/id_ed25519
 # Setup ~/.ssh/authorized_keys.
-echo ${SSH_AUTHORIZED_KEY} >> /home/${USERNAME}/.ssh/authorized_keys
+touch ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+echo ${SSH_AUTHORIZED_KEY} >> ~/.ssh/authorized_keys
 # Setup SSH agent.
-echo 'eval "\$(ssh-agent -s)"' >> /home/${USERNAME}/.zprofile
+echo 'eval "\$(ssh-agent -s)"' >> ~/.zprofile
 EOF
 
 # Setup terminal things.
 su - ${USERNAME} <<EOF
 # Install: oh-my-zsh
 sh -c "\$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+# Install: oh-my-zsh autocomplete
+git clone https://github.com/zsh-users/zsh-autosuggestions \${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+sed -i 's/plugins=(\(\w\+\))/plugins=(\1 zsh-autosuggestions)/g' ~/.zshrc
 # Enable byobu in bash.
 byobu-enable
 # Enable byobu in zsh.
-echo "_byobu_sourced=1 . /usr/local/bin/byobu-launch 2>/dev/null || true" >> /home/${USERNAME}/.zprofile
+echo "_byobu_sourced=1 . /usr/local/bin/byobu-launch 2>/dev/null || true" >> ~/.zprofile
 # Set zsh as default shell of byobu.
-echo "set -g default-shell /usr/bin/zsh" >> /home/${USERNAME}/.byobu/.tmux.conf
-echo "set -g default-command /usr/bin/zsh" >> /home/${USERNAME}/.byobu/.tmux.conf
+echo "set -g default-shell /usr/bin/zsh" >> ~/.byobu/.tmux.conf
+echo "set -g default-command /usr/bin/zsh" >> ~/.byobu/.tmux.conf
 EOF
 
 # Setup linuxbrew.
 su - ${USERNAME} <<EOF
 # Install: linuxbrew.
 /bin/bash -c "\$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" </dev/null
-echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/${USERNAME}/.zshrc
+echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.zshrc
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-EOF
-
 # Install: node and npm.
 # brew install node
+EOF

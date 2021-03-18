@@ -9,8 +9,8 @@ set -xeo pipefail
 # Refresh repositories.
 apt update
 
-# Install: git, zsh, byobu, tree.
-apt install git zsh byobu tree --yes
+# Install: build-essential, git, zsh, byobu, tree.
+apt install build-essential git zsh byobu tree --yes
 
 # Create a password-less user $USERNAME with sudo. 
 # Note: You can set a password after the script execution w/ `sudo passwd ${USERNAME}`
@@ -49,6 +49,11 @@ function run_as_user() {
     # Set zsh as default shell of byobu.
     echo "set -g default-shell /usr/bin/zsh" >> ~/.byobu/.tmux.conf
     echo "set -g default-command /usr/bin/zsh" >> ~/.byobu/.tmux.conf
+
+    # Install: docker
+    curl -fsSL https://get.docker.com -o /tmp/get-docker.sh
+    sudo sh /tmp/get-docker.sh
+    sudo usermod -aG docker $(whoami)
     
     # Install: linuxbrew.
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" </dev/null

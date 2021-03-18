@@ -69,3 +69,6 @@ echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 su - ${USERNAME} -c "$(declare -f run_as_user); run_as_user \"${SSH_AUTHORIZED_KEY}\""
 # Re-enable password prompt for sudo.
 sed -i '/%sudo ALL=(ALL) NOPASSWD:ALL/d' /etc/sudoers
+
+# TODO: git config --global user.email "you@example.com"
+# TODO: git config --global user.name "you@example.com"

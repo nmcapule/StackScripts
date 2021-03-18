@@ -2,7 +2,9 @@
 
 Linode StackScripts.
 
-## devbox.sh
+## Scripts
+
+### devbox.sh
 
 Confirmed workin w/ Debian 10. Check me out at https://cloud.linode.com/stackscripts/795165
 
@@ -10,3 +12,9 @@ Confirmed workin w/ Debian 10. Check me out at https://cloud.linode.com/stackscr
 2. Setup ssh w/ default authorized keys for the user
 3. Setup oh-my-zsh with byobu for the user
 4. Setup linuxbrew for the user
+
+To deploy:
+
+```sh
+$ make update_nmcapule_devbox
+```
